@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends ScreenRecordActivity implements OnSenderListener {
-
     private AppCompatButton btn_start;
     private String ip = "192.168.13.193";
     private int port = 11111; //pc接受直播命令的端口号

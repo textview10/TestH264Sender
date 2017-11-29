@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.zonekey.testh264sender"
+        applicationId "com.test.testh264sender"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1

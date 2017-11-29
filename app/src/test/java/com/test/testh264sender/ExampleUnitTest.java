@@ -1,4 +1,4 @@
-package com.zonekey.testh264sender;
+package com.test.testh264sender;
 
 import org.junit.Test;
 

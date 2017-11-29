@@ -1,12 +1,10 @@
-package com.zonekey.testh264sender;
+package com.test.testh264sender;
 
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.laifeng.sopcastsdk.configuration.VideoConfiguration;
 import com.laifeng.sopcastsdk.screen.ScreenRecordActivity;

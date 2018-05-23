@@ -81,7 +81,7 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
         byteBuffer.put(pps);
         mSpsPps = byteBuffer.array();
         packetListener.onSpsPps(mSpsPps);   //add by xu.wang onSpsPps()回调没有参与发送逻辑,想要发送这些信息需要回调onPacket();
-        packetListener.onPacket(mSpsPps, HEADER);
+        packetListener.onPacket(mSpsPps, FIRST_VIDEO);
         isHeaderWrite = true;
     }
 
@@ -102,11 +102,10 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
         }
         ByteBuffer bb;
         if (isKeyFrame) {
-            bb = ByteBuffer.allocate(4 + video.length + mSpsPps.length);
-            bb.put(mSpsPps);
+            bb = ByteBuffer.allocate(video.length);
             bb.put(video);
         } else {
-            bb = ByteBuffer.allocate(4 + video.length );
+            bb = ByteBuffer.allocate(video.length);
             bb.put(video);
         }
         packetListener.onPacket(bb.array(), packetType);

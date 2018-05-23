@@ -3,8 +3,10 @@ package com.test.testh264sender;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import com.laifeng.sopcastsdk.configuration.VideoConfiguration;
 import com.laifeng.sopcastsdk.screen.ScreenRecordActivity;
@@ -18,12 +20,13 @@ import java.io.IOException;
 
 public class MainActivity extends ScreenRecordActivity implements OnSenderListener {
     private AppCompatButton btn_start;
-    private String ip = "192.168.13.193";
+    private String ip = "192.168.3.128";
     private int port = 11111; //pc接受直播命令的端口号
     private VideoConfiguration mVideoConfiguration;
     private TcpSender tcpSender;
     private final static String TAG = "MainActivity";
     private boolean isRecord = false;
+    private EditText et_main;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +37,25 @@ public class MainActivity extends ScreenRecordActivity implements OnSenderListen
 
     private void initalView() {
         btn_start = findViewById(R.id.btn_start);
+        et_main = findViewById(R.id.et_main);
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!isRecord) {
+                    if (!TextUtils.isEmpty(et_main.getText().toString())) {
+                        ip = btn_start.getText().toString();
+                    }
+                    Log.e("Test", "" + ip);
                     requestRecording();
                     Log.e("Test", "start record");
+                    btn_start.setText("start record");
                 } else {
                     stopRecording();
                     Log.e("Test", "stop record");
+                    btn_start.setText("stop record");
                 }
             }
         });
-
-        initialData();
     }
 
     private void initialData() {
@@ -92,7 +100,6 @@ public class MainActivity extends ScreenRecordActivity implements OnSenderListen
         tcpSender.setSenderListener(this);
         tcpSender.setVideoParams(mVideoConfiguration);
         tcpSender.connect();
-        LocalSender localSender = new LocalSender();
         setRecordSender(tcpSender);
         startRecording();
     }
@@ -126,11 +133,12 @@ public class MainActivity extends ScreenRecordActivity implements OnSenderListen
     public void onNetBad() {
         Log.e(TAG, "onNetBad");
     }
-
+    
 
     @Override
-    public void finish() {
-        super.finish();
+    protected void onDestroy() {
         tcpSender.stop();
+        super.onDestroy();
     }
+
 }

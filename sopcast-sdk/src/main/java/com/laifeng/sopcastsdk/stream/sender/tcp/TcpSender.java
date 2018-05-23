@@ -5,6 +5,7 @@ import android.util.Log;
 import com.laifeng.sopcastsdk.configuration.VideoConfiguration;
 import com.laifeng.sopcastsdk.entity.Frame;
 import com.laifeng.sopcastsdk.stream.packer.rtmp.RtmpPacker;
+import com.laifeng.sopcastsdk.stream.packer.tcp.TcpPacker;
 import com.laifeng.sopcastsdk.stream.sender.OnSenderListener;
 import com.laifeng.sopcastsdk.stream.sender.Sender;
 import com.laifeng.sopcastsdk.stream.sender.rtmp.packets.Chunk;
@@ -53,9 +54,9 @@ public class TcpSender implements Sender, SendQueueListener {
         Frame<Chunk> frame;
         Video video = new Video();
         video.setData(data);
-        if (type == RtmpPacker.FIRST_VIDEO) {
+        if (type == TcpPacker.FIRST_VIDEO) {
             frame = new Frame(video, type, Frame.FRAME_TYPE_CONFIGURATION);
-        } else if (type == RtmpPacker.KEY_FRAME) {
+        } else if (type == TcpPacker.KEY_FRAME) {
             frame = new Frame(video, type, Frame.FRAME_TYPE_KEY_FRAME);
         } else {
             frame = new Frame(video, type, Frame.FRAME_TYPE_INTER_FRAME);

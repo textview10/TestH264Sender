@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
+import android.os.Build;
 
 import com.laifeng.sopcastsdk.blacklist.BlackListHelper;
 import com.laifeng.sopcastsdk.configuration.VideoConfiguration;
@@ -38,9 +39,13 @@ public class VideoMediaCodec {
         format.setInteger(MediaFormat.KEY_FRAME_RATE, fps);
         format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, videoConfiguration.ifi);
         // -----------------ADD BY XU.WANG 当画面静止时,重复最后一帧--------------------------------------------------------
-        format.setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER,  1000000 / 45);
-        //----------------------------------------------
-        format.setInteger(MediaFormat.KEY_BITRATE_MODE, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_VBR);
+        format.setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, 1000000 / 45);
+        //------------------MODIFY BY XU.WANG 为解决MIUI9.5花屏而增加...-------------------------------
+        if (Build.MANUFACTURER.equalsIgnoreCase("XIAOMI")) {
+            format.setInteger(MediaFormat.KEY_BITRATE_MODE, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CQ);
+        } else {
+            format.setInteger(MediaFormat.KEY_BITRATE_MODE, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_VBR);
+        }
         format.setInteger(MediaFormat.KEY_COMPLEXITY, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR);
         MediaCodec mediaCodec = null;
 

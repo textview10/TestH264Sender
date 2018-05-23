@@ -51,15 +51,17 @@ public class TcpSender implements Sender, SendQueueListener {
 
     @Override
     public void onData(byte[] data, int type) {
-        Frame<Chunk> frame;
+        Frame<Chunk> frame = null;
         Video video = new Video();
         video.setData(data);
         if (type == TcpPacker.FIRST_VIDEO) {
             frame = new Frame(video, type, Frame.FRAME_TYPE_CONFIGURATION);
         } else if (type == TcpPacker.KEY_FRAME) {
             frame = new Frame(video, type, Frame.FRAME_TYPE_KEY_FRAME);
-        } else {
+        } else if (type == TcpPacker.INTER_FRAME) {
             frame = new Frame(video, type, Frame.FRAME_TYPE_INTER_FRAME);
+        } else if (type == TcpPacker.AUDIO) {
+            frame = new Frame(video, type, Frame.FRAME_TYPE_AUDIO);
         }
         if (frame == null) return;
         mSendQueue.putFrame(frame);

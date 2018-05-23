@@ -26,6 +26,7 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
     public static final int HEADER = 0;
     public static final int METADATA = 1;
     public static final int FIRST_VIDEO = 2;
+    public static final int AUDIO = 4;
     public static final int KEY_FRAME = 5;
     public static final int INTER_FRAME = 6;
 
@@ -33,6 +34,9 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
     private boolean isHeaderWrite;
     private boolean isKeyFrameWrite;
 
+    private int mAudioSampleRate, mAudioSampleSize;
+    private boolean mIsStereo;
+    private boolean mSendAudio = false;
 
     private AnnexbHelper mAnnexbHelper;
 
@@ -60,6 +64,17 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
         if (packetListener == null || !isHeaderWrite || !isKeyFrameWrite) {
             return;
         }
+        if (!mSendAudio) {
+            return;
+        }
+        bb.position(bi.offset);
+        bb.limit(bi.offset + bi.size);
+        byte[] audio = new byte[bi.size];
+        bb.get(audio);
+        ByteBuffer tempBb = ByteBuffer.allocate(audio.length + 4);
+        tempBb.put(header);
+        tempBb.put(audio);
+        packetListener.onPacket(tempBb.array(), AUDIO);
     }
 
     @Override
@@ -109,6 +124,16 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
             bb.put(video);
         }
         packetListener.onPacket(bb.array(), packetType);
+    }
+
+    public void initAudioParams(int sampleRate, int sampleSize, boolean isStereo) {
+        mAudioSampleRate = sampleRate;
+        mAudioSampleSize = sampleSize;
+        mIsStereo = isStereo;
+    }
+
+    public void setSendAudio(boolean sendAudio) {
+        this.mSendAudio = sendAudio;
     }
 
 }

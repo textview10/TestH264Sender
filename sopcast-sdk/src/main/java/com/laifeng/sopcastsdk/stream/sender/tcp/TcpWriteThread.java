@@ -46,7 +46,7 @@ public class TcpWriteThread extends Thread {
             }
             if (frame.data instanceof Video) {
                 sendData(((Video) frame.data).getData());
-                Log.e(TAG,"send a msg" );
+//                Log.e(TAG,"send a msg" );
             }
         }
     }
@@ -62,7 +62,7 @@ public class TcpWriteThread extends Thread {
             EncodeV1 encodeV1 = new EncodeV1(buff);
             bos.write(encodeV1.buildSendContent());
             bos.flush();
-            Log.e(TAG,"send data ");
+//            Log.e(TAG,"send data ");
         } catch (IOException e) {
             startFlag = false;
 //            Log.e("TcpWriteThread", "sendData Exception =" + e.toString());

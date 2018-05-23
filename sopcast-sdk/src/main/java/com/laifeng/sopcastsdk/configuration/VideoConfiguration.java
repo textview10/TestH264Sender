@@ -14,7 +14,7 @@ public final class VideoConfiguration {
     //--------------------默认高清时的设置参数--------------------------------
     public static final int DEFAULT_HEIGHT = 640;
     public static final int DEFAULT_WIDTH = 360;
-    public static final int DEFAULT_FPS = 30;
+    public static final int DEFAULT_FPS = 15;
     public static final int DEFAULT_MAX_BPS = 1500;
     public static final int DEFAULT_MIN_BPS = 400;
     public static final int DEFAULT_IFI = 1;    //关键帧间隔时间 单位s
@@ -22,7 +22,7 @@ public final class VideoConfiguration {
     //--------------------默认标清时的设置参数--------------------------------
     public static final int SECOND_HEIGHT = 640;
     public static final int SECOND_WIDTH = 360;
-    public static final int SECOND_FPS = 15;
+    public static final int SECOND_FPS = 10;
     public static final int SECOND_MAX_BPS = 600;
     public static final int SECOND_MIN_BPS = 300;
     public static final int SECOND_IFI = 3;

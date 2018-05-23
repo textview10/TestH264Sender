@@ -44,6 +44,8 @@ public class NormalSendQueue implements ISendQueue {
     private volatile boolean mScanFlag;
     private SendQueueListener mSendQueueListener;
     private ScanThread mScanThread;
+    private boolean isDebug = false;
+    ;
 
     public NormalSendQueue() {
         mFrameBuffer = new ArrayBlockingQueue<>(mFullQueueCount, true);
@@ -92,11 +94,11 @@ public class NormalSendQueue implements ISendQueue {
         abandonData();
         try {
             mFrameBuffer.put(frame);
-            Log.e("NormalSendQueue", "put frame total = " + mFrameBuffer.size());
+            showLog("put frame total = " + mFrameBuffer.size());
             mInFrameCount.getAndIncrement();
             mTotalFrameCount.getAndIncrement();
         } catch (InterruptedException e) {
-            Log.e("NormalSendQueueE", "put Frame exception" + e.toString());
+            showLog("put Frame exception" + e.toString());
             e.printStackTrace();
         }
     }
@@ -108,26 +110,26 @@ public class NormalSendQueue implements ISendQueue {
         }
         Frame frame = null;
         try {
-            Log.e("NormalSendQueue", "take frame total size = " + mFrameBuffer.size());
+            showLog("take frame total size = " + mFrameBuffer.size());
             frame = mFrameBuffer.take();
             if (frame.frameType == FRAME_TYPE_KEY_FRAME) mKeyFrameCount.getAndDecrement();
             mOutFrameCount.getAndIncrement();
             mTotalFrameCount.getAndDecrement();
         } catch (InterruptedException e) {
             //do nothing
-            Log.e("NormalSendQueue", "take Frame exception" + e.toString());
+            showLog("take Frame exception" + e.toString());
         }
         return frame;
     }
 
     private void abandonData() {
         if (mTotalFrameCount.get() >= (mFullQueueCount / 3)) {
-            Log.e("NormalSendQueue", "队列里的帧数太多,开始丢帧..");
+            showLog("队列里的帧数太多,开始丢帧..");
             //从队列头部开始搜索，删除最早发现的连续P帧
             boolean pFrameDelete = false;
             boolean start = false;
             for (Frame frame : mFrameBuffer) {
-                if (!start) Log.e("NormalSendQueue", "丢掉了下一个KEY_FRAME前的所有INTER_FRAME..");
+                if (!start) showLog("丢掉了下一个KEY_FRAME前的所有INTER_FRAME..");
                 if (frame.frameType == FRAME_TYPE_INTER_FRAME) {
                     start = true;
                 }
@@ -139,7 +141,7 @@ public class NormalSendQueue implements ISendQueue {
                         pFrameDelete = true;
                     } else if (frame.frameType == FRAME_TYPE_KEY_FRAME) {
                         if (mKeyFrameCount.get() > 5) {
-                            Log.e("NormalSendQueue", "丢掉了一个关键帧.. total" + mKeyFrameCount.get());
+                            showLog("丢掉了一个关键帧.. total" + mKeyFrameCount.get());
                             mFrameBuffer.remove(frame);
                             mKeyFrameCount.getAndDecrement();
                             continue;
@@ -154,7 +156,7 @@ public class NormalSendQueue implements ISendQueue {
                 for (Frame frame : mFrameBuffer) {
                     if (frame.frameType == FRAME_TYPE_KEY_FRAME) {
                         mFrameBuffer.remove(frame);
-                        Log.e("NormalSendQueue", "丢掉了一个关键帧..");
+                        showLog("丢掉了一个关键帧..");
                         mTotalFrameCount.getAndDecrement();
                         mGiveUpFrameCount.getAndIncrement();
                         mKeyFrameCount.getAndDecrement();
@@ -237,5 +239,9 @@ public class NormalSendQueue implements ISendQueue {
             this.inCount = inCount;
             this.outCount = outCount;
         }
+    }
+
+    private void showLog(String msg) {
+        if (isDebug) Log.e("NormalSendQueue", "" + msg);
     }
 }

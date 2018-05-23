@@ -49,9 +49,9 @@ public class ScreenRecordActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RECORD_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-//                NormalAudioController audioController = new NormalAudioController();
+                NormalAudioController audioController = new NormalAudioController();
                 ScreenVideoController videoController = new ScreenVideoController(mMediaProjectionManage, resultCode, data);
-                mStreamController = new StreamController(videoController, null);
+                mStreamController = new StreamController(videoController, audioController);
                 requestRecordSuccess();
             } else {
                 requestRecordFail();

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.laifeng.sopcastsdk.configuration.AudioConfiguration;
 import com.laifeng.sopcastsdk.configuration.VideoConfiguration;
 import com.laifeng.sopcastsdk.screen.ScreenRecordActivity;
 import com.laifeng.sopcastsdk.stream.packer.tcp.TcpPacker;
@@ -20,7 +21,7 @@ import java.io.IOException;
 
 public class MainActivity extends ScreenRecordActivity implements OnSenderListener {
     private AppCompatButton btn_start;
-    private String ip = "192.168.3.128";
+    private String ip = "192.168.13.201";
     private int port = 11111; //pc接受直播命令的端口号
     private VideoConfiguration mVideoConfiguration;
     private TcpSender tcpSender;
@@ -32,10 +33,10 @@ public class MainActivity extends ScreenRecordActivity implements OnSenderListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initalView();
+        initialView();
     }
 
-    private void initalView() {
+    private void initialView() {
         btn_start = findViewById(R.id.btn_start);
         et_main = findViewById(R.id.et_main);
         btn_start.setOnClickListener(new View.OnClickListener() {
@@ -90,8 +91,9 @@ public class MainActivity extends ScreenRecordActivity implements OnSenderListen
 
     private void startRecord() {
         TcpPacker packer = new TcpPacker();
+        packer.setSendAudio(true);
 //        FlvPacker flvPacker = new FlvPacker();
-//        packer.initAudioParams(AudioConfiguration.DEFAULT_FREQUENCY, 16, false);
+        packer.initAudioParams(AudioConfiguration.DEFAULT_FREQUENCY, 16, false);
         mVideoConfiguration = new VideoConfiguration.Builder().build();
         setVideoConfiguration(mVideoConfiguration);
         setRecordPacker(packer);
@@ -133,7 +135,7 @@ public class MainActivity extends ScreenRecordActivity implements OnSenderListen
     public void onNetBad() {
         Log.e(TAG, "onNetBad");
     }
-    
+
 
     @Override
     protected void onDestroy() {

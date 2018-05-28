@@ -89,14 +89,17 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
 
     @Override
     public void onSpsPps(byte[] sps, byte[] pps) {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(sps.length + pps.length + 8);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(sps.length + 4);
         byteBuffer.put(header);
         byteBuffer.put(sps);
-        byteBuffer.put(header);
-        byteBuffer.put(pps);
         mSpsPps = byteBuffer.array();
-        packetListener.onSpsPps(mSpsPps);   //add by xu.wang onSpsPps()回调没有参与发送逻辑,想要发送这些信息需要回调onPacket();
+
         packetListener.onPacket(mSpsPps, FIRST_VIDEO);
+
+        ByteBuffer byteBuffer1 = ByteBuffer.allocate(pps.length + 4);
+        byteBuffer1.put(header);
+        byteBuffer1.put(pps);
+        packetListener.onPacket(byteBuffer1.array(), FIRST_VIDEO);
         isHeaderWrite = true;
     }
 

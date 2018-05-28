@@ -8,6 +8,6 @@ package com.test.testh264sender;
  */
 
 public class Constant {
-    public static String ip = "192.168.3.60";
-    public static final int port = 11111; // //pc接受直播命令的端口号
+    public static String ip = "192.168.43.142";
+    public static final int port = 11111; // //Server接收的端口号
 }

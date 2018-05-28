@@ -82,6 +82,7 @@ public class LaifengLivingActivity extends AppCompatActivity {
         cameraLivingView.setVideoConfiguration(mVideoConfiguration);
         startCameraMil = System.currentTimeMillis();
         TcpPacker packer = new TcpPacker();
+        packer.setSendAudio(false);
         cameraLivingView.setPacker(packer);    //设置发送器
         mTcpSender = new TcpSender(Constant.ip, Constant.port);
         mTcpSender.setSenderListener(mSenderListener);

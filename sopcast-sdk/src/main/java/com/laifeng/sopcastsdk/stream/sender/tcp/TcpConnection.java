@@ -101,7 +101,7 @@ public class TcpConnection implements OnTcpReadListener, OnTcpWriteListener {
 
     @Override
     public void connectSuccess() {
-        Log.e(TAG,"connect success");
+        Log.e(TAG, "connect success");
         mWrite.start();
     }
 
@@ -122,8 +122,8 @@ public class TcpConnection implements OnTcpReadListener, OnTcpWriteListener {
             @Override
             public void run() {
                 super.run();
-                mWrite.shutDown();
-                mRead.shutDown();
+                if (mWrite != null) mWrite.shutDown();
+                if (mRead != null) mRead.shutDown();
                 try {
                     if (out != null) out.close();
                     if (in != null) in.close();

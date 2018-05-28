@@ -1,4 +1,4 @@
-package com.test.testh264sender;
+package com.test.testh264sender.ui;
 
 import android.os.Environment;
 import android.os.Bundle;
@@ -10,22 +10,21 @@ import android.widget.EditText;
 
 import com.laifeng.sopcastsdk.configuration.AudioConfiguration;
 import com.laifeng.sopcastsdk.configuration.VideoConfiguration;
-import com.laifeng.sopcastsdk.screen.ScreenRecordActivity;
 import com.laifeng.sopcastsdk.stream.packer.tcp.TcpPacker;
 import com.laifeng.sopcastsdk.stream.sender.OnSenderListener;
-import com.laifeng.sopcastsdk.stream.sender.local.LocalSender;
 import com.laifeng.sopcastsdk.stream.sender.tcp.TcpSender;
+import com.test.testh264sender.Constant;
+import com.test.testh264sender.R;
 
 import java.io.File;
 import java.io.IOException;
 
-public class MainActivity extends ScreenRecordActivity implements OnSenderListener {
+public class LaifengScreenRecordActivity extends com.laifeng.sopcastsdk.screen.ScreenRecordActivity implements OnSenderListener {
     private AppCompatButton btn_start;
-    private String ip = "192.168.13.201";
-    private int port = 11111; //pc接受直播命令的端口号
+    private String ip;
     private VideoConfiguration mVideoConfiguration;
     private TcpSender tcpSender;
-    private final static String TAG = "MainActivity";
+    private final static String TAG = "LaifengScreenRecord";
     private boolean isRecord = false;
     private EditText et_main;
 
@@ -33,6 +32,7 @@ public class MainActivity extends ScreenRecordActivity implements OnSenderListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ip = Constant.ip;
         initialView();
     }
 
@@ -98,7 +98,7 @@ public class MainActivity extends ScreenRecordActivity implements OnSenderListen
         setVideoConfiguration(mVideoConfiguration);
         setRecordPacker(packer);
 
-        tcpSender = new TcpSender(ip, port);
+        tcpSender = new TcpSender(ip, Constant.port);
         tcpSender.setSenderListener(this);
         tcpSender.setVideoParams(mVideoConfiguration);
         tcpSender.connect();
@@ -128,12 +128,12 @@ public class MainActivity extends ScreenRecordActivity implements OnSenderListen
 
     @Override
     public void onNetGood() {
-        Log.e(TAG, "onNetGood");
+
     }
 
     @Override
     public void onNetBad() {
-        Log.e(TAG, "onNetBad");
+
     }
 
 

@@ -26,6 +26,11 @@ public class VideoMediaCodec {
     public static MediaCodec getVideoMediaCodec(VideoConfiguration videoConfiguration) {
         int videoWidth = getVideoSize(videoConfiguration.width);
         int videoHeight = getVideoSize(videoConfiguration.height);
+        if (Build.MANUFACTURER.equalsIgnoreCase("XIAOMI")) {
+            videoConfiguration.maxBps = 500;
+            videoConfiguration.fps = 10;
+            videoConfiguration.ifi = 3;
+        }
         MediaFormat format = MediaFormat.createVideoFormat(videoConfiguration.mime, videoWidth, videoHeight);
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT,
                 MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);

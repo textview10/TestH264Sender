@@ -31,9 +31,9 @@ public final class VideoConfiguration {
     public int height;
     public int width;
     public final int minBps;
-    public final int maxBps;
-    public final int fps;
-    public final int ifi;
+    public int maxBps;
+    public int fps;
+    public int ifi;
     public final String mime;
 
     private VideoConfiguration(final Builder builder) {

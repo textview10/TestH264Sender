@@ -1,18 +1,11 @@
 package com.laifeng.sopcastsdk.stream.packer.tcp;
 
 import android.media.MediaCodec;
-import android.util.Log;
 
 import com.laifeng.sopcastsdk.stream.packer.AnnexbHelper;
 import com.laifeng.sopcastsdk.stream.packer.Packer;
-import com.laifeng.sopcastsdk.stream.packer.flv.FlvPackerHelper;
 
 import java.nio.ByteBuffer;
-
-import static com.laifeng.sopcastsdk.stream.packer.flv.FlvPackerHelper.FLV_TAG_HEADER_SIZE;
-import static com.laifeng.sopcastsdk.stream.packer.flv.FlvPackerHelper.PRE_SIZE;
-import static com.laifeng.sopcastsdk.stream.packer.flv.FlvPackerHelper.VIDEO_HEADER_SIZE;
-import static com.laifeng.sopcastsdk.stream.packer.flv.FlvPackerHelper.VIDEO_SPECIFIC_CONFIG_EXTEND_SIZE;
 
 /**
  * Created by xu.wang
@@ -40,6 +33,7 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
 
     private AnnexbHelper mAnnexbHelper;
 
+
     public TcpPacker() {
         mAnnexbHelper = new AnnexbHelper();
     }
@@ -61,7 +55,7 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
 
     @Override
     public void onAudioData(ByteBuffer bb, MediaCodec.BufferInfo bi) {
-        if (packetListener == null || !isHeaderWrite || !isKeyFrameWrite) {
+        if (packetListener == null ) {
             return;
         }
         if (!mSendAudio) {
@@ -71,8 +65,11 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
         bb.limit(bi.offset + bi.size);
         byte[] audio = new byte[bi.size];
         bb.get(audio);
-        ByteBuffer tempBb = ByteBuffer.allocate(audio.length + 4);
+        //一般第一帧都是2个字节
+        int length = 7 + audio.length;
+        ByteBuffer tempBb = ByteBuffer.allocate(length + 4);
         tempBb.put(header);
+        tempBb.put(getADTSHeader(length));
         tempBb.put(audio);
         packetListener.onPacket(tempBb.array(), AUDIO);
     }
@@ -95,7 +92,6 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
         mSpsPps = byteBuffer.array();
 
         packetListener.onPacket(mSpsPps, FIRST_VIDEO);
-
         ByteBuffer byteBuffer1 = ByteBuffer.allocate(pps.length + 4);
         byteBuffer1.put(header);
         byteBuffer1.put(pps);
@@ -139,4 +135,23 @@ public class TcpPacker implements Packer, AnnexbHelper.AnnexbNaluListener {
         this.mSendAudio = sendAudio;
     }
 
+    /**
+     * 给编码出的aac裸流添加adts头字段
+     *
+     * @param packetLen
+     */
+    private byte[] getADTSHeader(int packetLen) {
+        byte[] packet = new byte[7];
+        int profile = 2;  //AAC LC
+        int freqIdx = 4;  //16.0KHz
+        int chanCfg = 2;  //CPE 声道数
+        packet[0] = (byte) 0xFF;
+        packet[1] = (byte) 0xF9;
+        packet[2] = (byte) (((profile - 1) << 6) + (freqIdx << 2) + (chanCfg >> 2));
+        packet[3] = (byte) (((chanCfg & 3) << 6) + (packetLen >> 11));
+        packet[4] = (byte) ((packetLen & 0x7FF) >> 3);
+        packet[5] = (byte) (((packetLen & 7) << 5) + 0x1F);
+        packet[6] = (byte) 0xFC;
+        return packet;
+    }
 }

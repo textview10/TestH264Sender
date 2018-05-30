@@ -21,7 +21,7 @@ public final class AudioConfiguration {
     public static final int DEFAULT_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     public static final int DEFAULT_AAC_PROFILE = MediaCodecInfo.CodecProfileLevel.AACObjectLC;
     public static final int DEFAULT_CHANNEL_COUNT = 2;
-    public static final boolean DEFAULT_AEC = false;
+    public static final boolean DEFAULT_AEC = true;
 
     public final int minBps;
     public final int maxBps;

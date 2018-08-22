@@ -63,6 +63,7 @@ public class CameraLivingView extends CameraView {
     public interface LivingStartListener {
         void startError(int error);
         void startSuccess();
+
     }
 
     public CameraLivingView(Context context, AttributeSet attrs) {
@@ -130,10 +131,10 @@ public class CameraLivingView extends CameraView {
             SopCastLog.w(TAG, "Android sdk version error");
             return SDK_VERSION_ERROR;
         }
-        if(!checkAec()) {
-            SopCastLog.w(TAG, "Doesn't support audio aec");
-            return AUDIO_AEC_ERROR;
-        }
+//        if(!checkAec()) {
+//            SopCastLog.w(TAG, "Doesn't support audio aec");
+//            return AUDIO_AEC_ERROR;
+//        }
         if(!isCameraOpen()) {
             SopCastLog.w(TAG, "The camera have not open");
             return CAMERA_ERROR;

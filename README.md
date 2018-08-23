@@ -5,4 +5,6 @@ https://github.com/textview10/TestH264Player 	直播投屏数据服务,播放端
 
 https://github.com/textview10/TestH264Sender 	直播投屏数据采集,发送端
 
-http://blog.csdn.net/baidu_33546245/article/details/78670220
+需要跟08/23的H264 Player一块使用
+
+http://blog.csdn.net/baidu_33546245/article/details/78670220 

@@ -50,7 +50,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private void initialUdpServer() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
-        
+
     }
 
     @Override

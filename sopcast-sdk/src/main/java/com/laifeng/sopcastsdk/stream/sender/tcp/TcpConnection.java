@@ -97,7 +97,7 @@ public class TcpConnection implements OnTcpReadListener, OnTcpWriteListener {
 
     @Override
     public void socketDisconnect() {
-        listener.onSocketDisconnect();
+        if (listener != null) listener.onSocketDisconnect();
     }
 
     @Override

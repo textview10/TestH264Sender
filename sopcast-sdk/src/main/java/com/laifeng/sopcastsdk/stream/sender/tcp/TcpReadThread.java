@@ -37,7 +37,7 @@ public class TcpReadThread extends Thread {
                 acceptMsg();
             } catch (IOException e) {
                 startFlag = false;
-                mListener.socketDisconnect();
+                if (mListener != null)  mListener.socketDisconnect();
 //                Log.e(TAG, "read data Exception = " + e.toString());
             }
         }
@@ -59,8 +59,7 @@ public class TcpReadThread extends Thread {
         if(TextUtils.isEmpty(s)){
             return;
         }
-        if (TextUtils.equals(s, "OK")) {
-            mListener.connectSuccess();
+        if (TextUtils.equals(s, "OK")) {mListener.connectSuccess();
         }
     }
 }

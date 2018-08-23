@@ -59,14 +59,15 @@ public class TcpWriteThread extends Thread {
 
     public void sendData(byte[] buff) {
         try {
-            EncodeV1 encodeV1 = new EncodeV1(buff);
+            EncodeV1 encodeV1 = new EncodeV1(ScreenImageApi.encodeVersion1, ScreenImageApi.RECORD.MAIN_CMD,
+                    ScreenImageApi.RECORD.SEND_BUFF, buff);
             bos.write(encodeV1.buildSendContent());
             bos.flush();
 //            Log.e(TAG,"send data ");
         } catch (IOException e) {
             startFlag = false;
-//            Log.e("TcpWriteThread", "sendData Exception =" + e.toString());
-            mListener.socketDisconnect();
+            Log.e("TcpWriteThread", "sendData Exception =" + e.toString());
+            if (mListener != null) mListener.socketDisconnect();
         }
     }
 

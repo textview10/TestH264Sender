@@ -46,12 +46,12 @@ public class EncodeV1 {
         } else {
             buffLength = buff.length;
         }
-        bb = ByteBuffer.allocate(19 + bodyLength);
-        bb.put(Api.encodeVersion1); //编码版本1     0
+        bb = ByteBuffer.allocate(17 + bodyLength + buffLength);
+        bb.put(encodeVersion); //编码版本1     0,1
         bb.put(ByteUtil.int2Bytes(mainCmd));  //1-4   主指令
         bb.put(ByteUtil.int2Bytes(subCmd));   //5-8   子指令
         bb.put(ByteUtil.int2Bytes(bodyLength));  //9 -12位,数据长度
-        bb.put(ByteUtil.int2Bytes(buffLength));  //12 -15位,数据长度
+        bb.put(ByteUtil.int2Bytes(buffLength));  //13 -16位,数据长度
         if (bodyLength != 0) {
             bb.put(body.getBytes());
         }

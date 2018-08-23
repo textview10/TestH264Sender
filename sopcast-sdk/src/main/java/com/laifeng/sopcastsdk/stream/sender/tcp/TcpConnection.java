@@ -77,6 +77,7 @@ public class TcpConnection implements OnTcpReadListener, OnTcpWriteListener {
             mRead.start();
             state = State.LIVING;
             listener.onTcpConnectSuccess();
+            mWrite.sendData(new byte[]{});  //先发一个空的数据..用于让播放端相应,知道这是一个投屏请求
         } catch (IOException e) {
             e.printStackTrace();
             listener.onTcpConnectFail();
@@ -122,6 +123,7 @@ public class TcpConnection implements OnTcpReadListener, OnTcpWriteListener {
             @Override
             public void run() {
                 super.run();
+                listener = null;
                 if (mWrite != null) mWrite.shutDown();
                 if (mRead != null) mRead.shutDown();
                 try {

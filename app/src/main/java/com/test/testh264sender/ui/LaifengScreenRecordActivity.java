@@ -44,7 +44,7 @@ public class LaifengScreenRecordActivity extends com.laifeng.sopcastsdk.screen.S
             public void onClick(View view) {
                 if (!isRecord) {
                     if (!TextUtils.isEmpty(et_main.getText().toString())) {
-                        ip = btn_start.getText().toString();
+                        ip = et_main.getText().toString();
                     }
                     requestRecording();
                     Log.e(TAG, "Ip = " + ip + "start record");

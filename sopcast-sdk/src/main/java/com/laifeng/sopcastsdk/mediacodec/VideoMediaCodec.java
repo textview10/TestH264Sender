@@ -46,10 +46,10 @@ public class VideoMediaCodec {
         // -----------------ADD BY XU.WANG 当画面静止时,重复最后一帧--------------------------------------------------------
         format.setLong(MediaFormat.KEY_REPEAT_PREVIOUS_FRAME_AFTER, 1000000 / 45);
         //------------------MODIFY BY XU.WANG 为解决MIUI9.5花屏而增加...-------------------------------
-        if (Build.MANUFACTURER.equalsIgnoreCase("XIAOMI")) {
-            format.setInteger(MediaFormat.KEY_BITRATE_MODE, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CQ);
+       if (Build.MANUFACTURER.equalsIgnoreCase("XIAOMI")) {
+           format.setInteger(MediaFormat.KEY_BITRATE_MODE, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CQ);
         } else {
-            format.setInteger(MediaFormat.KEY_BITRATE_MODE, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_VBR);
+           format.setInteger(MediaFormat.KEY_BITRATE_MODE, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_VBR);
         }
         format.setInteger(MediaFormat.KEY_COMPLEXITY, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR);
         MediaCodec mediaCodec = null;
